@@ -130,6 +130,90 @@ async function rodarMacro() {
   // Passo 5 — pressiona Enter
   await pressionarTecla('Enter');
 
+  // Passo 5 (fluxo do usuário): clica na seção de conteúdo
+  const ok5 = await clicarEm('[data-test-id="inbox-content-section"]');
+  if (!ok5) return;
+  console.log('5️⃣ Clicou na seção de conteúdo');
+
+  // Passo 6 — marca o checkbox de espaçamento
+  const spacingCbx = await aguardarElemento('[data-test-id="preview-text-spacing-cbx"]');
+  if (!spacingCbx) return;
+  try {
+    if (typeof spacingCbx.checked !== 'undefined') {
+      spacingCbx.checked = true;
+      spacingCbx.dispatchEvent(new Event('change', { bubbles: true }));
+      console.log('6️⃣ Checkbox de espaçamento marcado');
+    } else {
+      spacingCbx.click();
+      console.log('6️⃣ Checkbox de espaçamento clicado');
+    }
+  } catch (err) {
+    console.error('❌ Erro ao marcar checkbox de espaçamento', err);
+    return;
+  }
+
+  // Passo 7 — clica no botão de remetente
+  const ok7 = await clicarEm('[data-test-id="fromNames"]');
+  if (!ok7) return;
+
+  // Passo 8 — aguarda dropdown abrir
+  const abriuFrom = await aguardarAtributo(
+    '[data-test-id="fromNames"]',
+    'data-dropdown-open',
+    'true'
+  );
+  if (!abriuFrom) return;
+
+  // Passo 9 — digita "experi" e confirma
+  await digitarCaracterePorCaractere('experi');
+  await pressionarTecla('Enter');
+  console.log('9️⃣ Remetente selecionado: experi');
+
+  // Passo 10 — clica no botão de reply-to
+  const ok10 = await clicarEm('[data-test-id="replyTos"]');
+  if (!ok10) return;
+
+  // Passo 11 — aguarda dropdown abrir
+  const abriuReply = await aguardarAtributo(
+    '[data-test-id="replyTos"]',
+    'data-dropdown-open',
+    'true'
+  );
+  if (!abriuReply) return;
+
+  // Passo 12 — digita "noreply" e confirma
+  await digitarCaracterePorCaractere('noreply');
+  await pressionarTecla('Enter');
+  console.log('12️⃣ Reply-to selecionado: noreply');
+
+  // Passo 13 — ativa o reply-to customizado
+  const customEnable = await aguardarElemento('[data-selenium="enable-custom-reply-to"]');
+  if (!customEnable) return;
+  try {
+    customEnable.click();
+    console.log('13️⃣ Ativou reply-to customizado');
+    await sleep(300);
+  } catch (err) {
+    console.error('❌ Erro ao ativar reply-to customizado', err);
+    return;
+  }
+
+  // Passo 14 — clica no botão de reply-to customizado
+  const ok14 = await clicarEm('[data-test-id="customReplyTos"]');
+  if (!ok14) return;
+
+  // Passo 15 — aguarda dropdown abrir
+  const abriuCustom = await aguardarAtributo(
+    '[data-test-id="customReplyTos"]',
+    'data-dropdown-open',
+    'true'
+  );
+  if (!abriuCustom) return;
+
+  // Passo 16 — digita "relaciona" e confirma
+  await digitarCaracterePorCaractere('relaciona');
+  await pressionarTecla('Enter');
+
   console.log('✅ Macro concluída!');
 }
 
